@@ -1,3 +1,4 @@
+require 'time'
 require 'httpclient'
 require 'json'
 
@@ -18,6 +19,10 @@ module GithubPulls
       call_pulls.map(&Pull.method(:new))
     end
 
+    def comments(number)
+      get("/repos/#{@repo}/issues/#{number}/comments").map(&Comment.method(:new))
+    end
+
     private
     def call(name)
       name.sub!(/^\//, '')
@@ -26,8 +31,12 @@ module GithubPulls
       http_result
     end
 
+    def get(name)
+      JSON.parse(call(name).body)
+    end
+
     def call_pulls
-      JSON.parse(call("/repos/#{@repo}/pulls").body)
+      get("/repos/#{@repo}/pulls")
     end
 
     def header
@@ -37,16 +46,19 @@ module GithubPulls
   end
 
   class Pull
-    attr :username, :label, :body, :sha, :html_url, :number, :private, :repo
-    def initialize(pull)
-      @username = pull['user']['login']
-      @label    = pull['head']['label']
-      @body     = pull['body']
-      @sha      = pull['head']['sha']
-      @html_url = pull['html_url']
-      @number   = pull['number']
-      @private  = pull['head']['repo']['private']
-      @repo     = pull['head']['repo']['ssh_url']
+    attr :username, :label, :body, :sha, :html_url, :number, :private, :repo, :pushed_at
+
+    def initialize(pull) # give a pull request api result json data
+      @data       = pull
+      @username   = pull['user']['login']
+      @label      = pull['head']['label']
+      @body       = pull['body']
+      @sha        = pull['head']['sha']
+      @html_url   = pull['html_url']
+      @number     = pull['number']
+      @private    = pull['head']['repo']['private']
+      @repo       = pull['head']['repo']['ssh_url']
+      @updated_at = Time.parse(pull['updated_at']).localtime
     end
 
     alias private? private
@@ -62,7 +74,18 @@ module GithubPulls
   git merge FETCH_HEAD
       EOD
     end
+  end
 
+
+  class Comment
+    attr :username, :body, :created_at, :updated_at
+    def initialize(comment) # give a pull request api
+      @data       = comment
+      @username   = comment['user']['login']
+      @body       = comment['body']
+      @created_at = Time.parse(comment['created_at']).localtime
+      @updated_at = Time.parse(comment['updated_at']).localtime
+    end
   end
 end
 
