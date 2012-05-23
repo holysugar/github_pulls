@@ -6,7 +6,7 @@ Simple library to get github pull requests via github api v3
 
 Add this line to your application's Gemfile:
 
-    gem 'github_pulls'
+    gem 'github_pulls', :git => 'https://github.com/holysugar/github_pulls'
 
 And then execute:
 
@@ -14,7 +14,23 @@ And then execute:
 
 ## Usage
 
-TODO: Write usage instructions here
+    require 'github_pulls'
+    api = GithubPulls::API.new('holysugar/github_pulls')
+    pulls = api.pulls # gets collection of GithubPulls::Pull
+    
+    pulls.each do |pull|
+      # using pull....
+    end
+
+If you want pulls of private repository, need OAuth2 access_token.
+
+
+    require 'github_pulls'
+    api = GithubPulls::API.new('holysugar/github_pulls', :access_token => '.....')
+
+or set `ENV['GITHUB_ACCESS_TOKEN']` .
+
+We can create access token to use bin/create_github_access_token .
 
 ## Contributing
 
