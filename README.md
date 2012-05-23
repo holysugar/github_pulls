@@ -20,21 +20,21 @@ And then execute:
     pull = pulls.first
 
     pull.fetch_and_merge_command
-		  #=> git fetch git@github.com:holysugar/github_pulls.git pull-sample\n  git merge FETCH_HEAD
+      #=> git fetch git@github.com:holysugar/github_pulls.git pull-sample\n  git merge FETCH_HEAD
     pull.html_url
-			#=> "https://github.com/holysugar/github_pulls/pull/1"
-		pull.username
-			#=> "holysugar"
+      #=> "https://github.com/holysugar/github_pulls/pull/1"
+    pull.username
+      #=> "holysugar"
     pull.branch
-		  #=> "pull-sample"
-		pull.number
-			#=> 1
-		pull.body
-			#=> "this is pull request sample, using in spec"
-		pull.label
-			#=> "holysugar:pull-sample"
-		pull.sha
-			#=> "483bef9dcd6e2f99f885be5011fafc1b5dc82bbf"
+      #=> "pull-sample"
+    pull.number
+      #=> 1
+    pull.body
+      #=> "this is pull request sample, using in spec"
+    pull.label
+      #=> "holysugar:pull-sample"
+    pull.sha
+      #=> "483bef9dcd6e2f99f885be5011fafc1b5dc82bbf"
 
 If you want pulls of private repository, need OAuth2 access_token.
 
