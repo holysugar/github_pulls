@@ -15,5 +15,8 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = GithubPulls::VERSION
 
+  gem.add_dependency('json')
+  gem.add_dependency('httpclient')
   gem.add_development_dependency('rspec')
+
 end
