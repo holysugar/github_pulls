@@ -1,0 +1,12 @@
+#!/bin/sh
+# Get github access_token in API v3
+# see http://developer.github.com/v3/#authentication
+#
+# requirements:
+# * curl
+# * sed
+
+read -p "User: " user
+read -p "Password: " password
+
+curl 2>/dev/null -d '{"scopes": ["repo"], "note": "pull request fetcher"}' -u "$user:$password" https://api.github.com/authorizations | sed -ne '/token/s/.*"\([0-9a-f]*\)".*/\1/p'
