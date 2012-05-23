@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+# TODO: using webmock?
+
 describe GithubPulls::API do
   let(:api) { GithubPulls::API.new('holysugar/github_pulls') }
 
@@ -17,7 +19,9 @@ describe GithubPulls::Pull do
   let(:pull) { api.pulls.last }
 
   describe "#branch" do
-    it "is branch name of head pull requested"
+    it "is branch name of head pull requested" do
+      pull.branch.should == "pull-sample"
+    end
   end
 end
 
