@@ -21,6 +21,11 @@ describe GithubPulls::API do
     end
 
   end
+
+  describe "#post_comment" do
+    it "posts new comment"
+  end
+
 end
 
 describe GithubPulls::Pull do

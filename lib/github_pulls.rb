@@ -23,16 +23,30 @@ module GithubPulls
       get("/repos/#{@repo}/issues/#{number}/comments").map(&Comment.method(:new))
     end
 
+    def post_comment(number, content)
+      post("/repos/#{@repo}/issues/#{number}/comments", "body" => content )
+    end
+
     private
-    def call(name)
+    def call(name, options = {})
       name.sub!(/^\//, '')
-      http_result = @client.get("https://api.github.com/#{name}", :header => header)
+
+      if options[:method] == :post
+        http_result = @client.post("https://api.github.com/#{name}", :header => header, :body => options[:body])
+      else
+        http_result = @client.get("https://api.github.com/#{name}", :header => header)
+      end
       raise HTTPError, "stauts code is #{http_result.status_code}" unless http_result.status_code < 300
       http_result
     end
 
     def get(name)
       JSON.parse(call(name).body)
+    end
+
+    def post(name, content_hash)
+      body = content_hash.to_json
+      JSON.parse(call(name, :method => :post, :body => body).body)
     end
 
     def call_pulls
